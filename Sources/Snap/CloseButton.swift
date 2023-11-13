@@ -1,21 +1,27 @@
 import SwiftUI
 
 public struct CloseButton: View {
-    let action: () -> Void
+    public init(_ isPresented: Binding<Bool>) {
+        _isPresented = isPresented
+    }
+    
+    @Binding private var isPresented: Bool
     
     // MARK: View
     public var body: some View {
         ZStack {
             Circle()
-                .fill(.quaternary)
+                .fill(.gray.opacity(0.5))
                 .frame(width: 29.0, height: 29.0)
+                .shadow(radius: 0.5)
             Button(action: {
-                action()
+                isPresented.toggle()
             }) {
                 Label("Close", systemImage: "xmark")
                     .labelStyle(.iconOnly)
                     .font(.system(.subheadline, weight: .bold))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.white.opacity(0.67))
+                    .padding()
             }
             .buttonStyle(.borderless)
         }
@@ -23,8 +29,6 @@ public struct CloseButton: View {
 }
 
 #Preview("Close Button") {
-    CloseButton {
-        
-    }
-    .padding()
+    @State var isPresented: Bool = false
+    return CloseButton($isPresented)
 }

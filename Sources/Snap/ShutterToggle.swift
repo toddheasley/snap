@@ -25,6 +25,7 @@ struct ShutterToggle: View {
                 .padding(isPressed ? 10.5 : 7.5)
         }
         .frame(width: diameter, height: diameter)
+        .padding()
         .gesture(DragGesture(minimumDistance: 0.0)
                 .onChanged { _ in
                     isPressed = true
@@ -39,5 +40,4 @@ struct ShutterToggle: View {
 #Preview("Shutter Toggle") {
     @State var isCapturing: Bool = false
     return ShutterToggle($isCapturing)
-        .padding()
 }

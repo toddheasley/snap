@@ -20,10 +20,9 @@ class VideoPreview: UIView {
         previewLayer.connection?.videoRotationAngle = UIDevice.current.videoRotationAngle
         
         // "Scale to fill" (square video preview layer by longest edge and center; overflow gets clipped)
-        switch UIDevice.current.orientation {
-        case .landscapeLeft, .landscapeRight:
+        if bounds.width > bounds.height {
             previewLayer.frame = CGRect(x: 0.0, y: (bounds.height - bounds.width) / 2.0, width: bounds.width, height: bounds.width)
-        default:
+        } else {
             previewLayer.frame = CGRect(x: (bounds.width - bounds.height) / 2.0, y: 0.0, width: bounds.height, height: bounds.height)
         }
     }
@@ -32,21 +31,6 @@ class VideoPreview: UIView {
         super.init(frame: frame)
         
         layer.addSublayer(previewLayer)
-    }
-}
-
-private extension UIDevice {
-    var videoRotationAngle: CGFloat {
-        switch orientation {
-        case .landscapeRight:
-            return 180.0
-        case .landscapeLeft:
-            return 0.0
-        case .portraitUpsideDown:
-            return 270.0
-        default:
-            return 90.0 // .portrait
-        }
     }
 }
 #endif

@@ -24,9 +24,7 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
             return
         }
         isCapturing = true
-        if let videoRotationAngle = videoPreview.previewLayer.connection?.videoRotationAngle {
-            photoOutput.connection(with: .video)?.videoRotationAngle = videoRotationAngle
-        }
+        photoOutput.connection(with: .video)?.videoRotationAngle = UIDevice.current.videoRotationAngle
         DispatchQueue.camera.async {
             self.photoOutput.capturePhoto(with: .camera, delegate: self)
         }
@@ -124,12 +122,7 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
                 self.configureSession()
             }
         case .authorized:
-            guard let deviceInput: AVCaptureDeviceInput = .best([
-                .builtInTripleCamera,
-                .builtInDualWideCamera,
-                .builtInDualCamera,
-                .builtInWideAngleCamera
-            ]) else {
+            guard let deviceInput: AVCaptureDeviceInput = .camera(Camera.device) else {
                 DispatchQueue.main.async {
                     self.delegate?.cameraFailed(error: AVError(.deviceNotConnected))
                 }
@@ -198,6 +191,8 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         startSession()
+        
+        setNeedsUpdateOfSupportedInterfaceOrientations()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -216,6 +211,12 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         
         configureSession()
     }
+    
+    /*
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask { .portrait }
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation { .portrait }
+    override var shouldAutorotate: Bool { false }
+     */ // Ignored by `UIViewControllerRepresentable`
     
     // MARK: AVCapturePhotoCaptureDelegate
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
@@ -239,10 +240,10 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
 }
 
 private extension AVCaptureDeviceInput {
-    static func best(_ deviceTypes: [AVCaptureDevice.DeviceType], position: AVCaptureDevice.Position = .back) -> Self? {
-        for deviceType in deviceTypes {
-            guard let device = AVCaptureDevice.default(deviceType, for: .video, position: .back),
-                  let deviceInput = try? Self(device: device) else {
+    static func camera(_ device: Camera.Device = .default()) -> Self? {
+        for deviceType in device.deviceTypes {
+            guard let _device: AVCaptureDevice = .default(deviceType, for: .video, position: device.position),
+                  let deviceInput: Self = try? Self(device: _device) else {
                 continue
             }
             return deviceInput
