@@ -2,12 +2,11 @@
 import SwiftUI
 
 struct DisableIdleTimer: ViewModifier {
+    let timeout: TimeInterval
     
     init(_ timeout: TimeInterval) {
         self.timeout = timeout
     }
-    
-    private let timeout: TimeInterval
     
     // MARK: ViewModifier
     func body(content: Content) -> some View {

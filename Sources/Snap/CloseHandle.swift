@@ -11,9 +11,9 @@ struct CloseHandle: View {
     // MARK: View
     public var body: some View {
         RoundedRectangle(cornerRadius: 2.5)
-            .fill(.secondary.opacity(isPressed ? 0.33 : 0.96))
+            .fill(.secondary.opacity(isPressed ? 0.33 : 0.97))
             .frame(width: 44.0, height: 5.0)
-            .padding(.vertical, 8.0)
+            .padding(.vertical, 9.5)
             .padding(.horizontal)
             .background(.gray.opacity(0.001))
             .gesture(DragGesture(minimumDistance: 0.0)
@@ -22,12 +22,13 @@ struct CloseHandle: View {
                 }
                 .onEnded { _ in
                     isPressed = false
-                    isPresented = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.33) {
+                        isPresented = false
+                    }
                 })
     }
 }
 
 #Preview("Close Handle") {
-    @State var isPresented: Bool = false
-    return CloseHandle($isPresented)
+    return CloseHandle(.constant(true))
 }

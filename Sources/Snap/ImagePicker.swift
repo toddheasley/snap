@@ -2,12 +2,12 @@
 import SwiftUI
 import AVFoundation
 
-public struct ImagePicker: UIViewControllerRepresentable {
-    public typealias Source = UIImagePickerController.SourceType
+struct ImagePicker: UIViewControllerRepresentable {
+    typealias Source = UIImagePickerController.SourceType
     
-    public let source: Source
+    let source: Source
     
-    public init(_ source: Source = .camera, image: Binding<Camera.Image?>, error: Binding<Error?> = .constant(nil)) {
+    init(_ source: Source = .camera, image: Binding<Camera.Image?>, error: Binding<Error?> = .constant(nil)) {
         self.source = source
         _image = image
         _error = error
@@ -18,7 +18,7 @@ public struct ImagePicker: UIViewControllerRepresentable {
     @Binding private var error: Error?
     
     // MARK: UIViewControllerRepresentable
-    public class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
         let parent: ImagePicker
         
         init(_ parent: ImagePicker) {
@@ -41,18 +41,18 @@ public struct ImagePicker: UIViewControllerRepresentable {
         }
     }
     
-    public func makeUIViewController(context: Context) -> UIImagePickerController {
+    func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePickerController: UIImagePickerController = UIImagePickerController()
         imagePickerController.sourceType = source
         imagePickerController.delegate = context.coordinator
         return imagePickerController
     }
     
-    public func updateUIViewController(_ controller: UIImagePickerController, context: Context) {
+    func updateUIViewController(_ controller: UIImagePickerController, context: Context) {
         
     }
     
-    public func makeCoordinator() -> Coordinator {
+    func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
 }

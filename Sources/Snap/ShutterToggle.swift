@@ -38,6 +38,5 @@ struct ShutterToggle: View {
 }
 
 #Preview("Shutter Toggle") {
-    @State var isCapturing: Bool = false
-    return ShutterToggle($isCapturing)
+    return ShutterToggle(.constant(false))
 }
