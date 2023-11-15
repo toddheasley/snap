@@ -62,6 +62,7 @@ Camera.flash = .auto
 * Interface binding to trigger the camera shutter
 * Handler to deliver a JPEG image of the configured quality, using the configured camera
 * Live video preview that scales to fill its SwiftUI containing view
+* Video preview flashes to indicate shutter release
 
 Use `Camera.shutterToggle(_ alignment: Alignment)` modifier to add a shutter button:
 
