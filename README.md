@@ -1,8 +1,10 @@
 # `Snap`
 
+![](docs/camera.jpg)
+
 __Point-and-shoot camera for iOS apps__
 
-![](docs/camera.jpg)
+A single-lens, single-use alternative to `UIImagePickerController`, `Snap` covers most common in-app picture-taking use cases. Zero configuration, unless you want to pick a different lens or enable the flash. It takes one auto-focused JPEG at a time.
 
 ### Supported Platforms
 
