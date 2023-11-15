@@ -4,7 +4,7 @@
 
 __Point-and-shoot camera for iOS apps__
 
-A single-lens, single-use alternative to `UIImagePickerController`, `Snap` covers most common in-app picture-taking use cases. Zero configuration, unless you want to pick a different lens or enable the flash. It takes one auto-focused JPEG at a time.
+A single-lens, single-use, SwiftUI alternative to `UIImagePickerController`, `Snap` covers most common in-app picture-taking use cases. Zero configuration, unless you want to pick a different lens or enable the flash. Takes one auto-focused JPEG at a time.
 
 ### Supported Platforms
 
@@ -55,6 +55,8 @@ Camera.flash = .off // Default
 Camera.flash = .auto
 ```
 
+⚠️ Add a [privacy description](https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/requesting_access_to_protected_resources) for camera usage to the main app target info.
+
 ## Kit of Parts
 
 ### `Camera`
@@ -96,12 +98,13 @@ EmptyView()
 SwiftUI is gonna get a first-party camera `Picker` of some kind _eventually_. In the meantime, `ImagePicker` wraps [`UIImagePickerController`](https://developer.apple.com/documentation/uikit/uiimagepickercontroller) for when you need features that `Snap.Camera` doesn't cover:
 
 * User-adjustable zoom and flash
+* Review, edit and retake
 * Hardware volume button shutter release
 * Movie recording
 
 ![](docs/image-picker.png)
 
-Use the provided view modifier to configure and present `ImagePicker`, then handle any captured media:
+Present `ImagePicker` with the included view modifier, then handle any captured media:
 
 ```swift
 import Snap
@@ -116,4 +119,6 @@ Button(action: { isPresented.toggle() }) {
 }
 ```
 
-⚠️ `UIImagePickerController` is designed to be used locked in portrait orientation only, but `UIViewControllerRepresentable` ignores view controller orientation locking. Hilarity ensues _unless_ your app is portrait only. Otherwise, stick to presenting from UIKit for now.
+⚠️ `UIImagePickerController` is designed to be locked in portrait orientation only, but `UIViewControllerRepresentable` ignores view controller orientation locking. Hilarity ensues _unless_ your app is portrait only. Otherwise, stick to presenting from UIKit for now.
+
+⚠️ Enabling movie capture in `ImagePicker` or `UIImagePickerController` requires an additional target info privacy description for microphone usage.
