@@ -6,9 +6,11 @@ extension View {
         modifier(DisableIdleTimer(timeout))
     }
     
-    public func imagePicker(_ isPresented: Binding<Bool>, image: Binding<Camera.Image?>, error: Binding<Error?> = .constant(nil)) -> some View {
+    public func imagePicker(_ isPresented: Binding<Bool>, media: [ImagePicker.Media] = [
+        .image
+    ], videoQuality: ImagePicker.Quality = .typeMedium, flashMode: ImagePicker.FlashMode = .off, isEditable: Bool = false, handler: @escaping ImagePicker.Handler) -> some View {
         return fullScreenCover(isPresented: isPresented) {
-            ImagePicker(image: image, error: error)
+            ImagePicker(media: media, videoQuality: videoQuality, flashMode: flashMode, isEditable: isEditable, handler: handler)
                 .background(.black)
         }
     }
@@ -22,6 +24,7 @@ extension View {
     public func fullScreenCover(_ isPresented: Binding<Bool>, alignment: Alignment = .bottom, @ViewBuilder camera: @escaping () -> Camera) -> some View {
         return fullScreenCover(isPresented: isPresented) {
             modal(isPresented, alignment: alignment, camera: camera)
+                .statusBarHidden()
         }
     }
     

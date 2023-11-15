@@ -3,15 +3,15 @@ import SwiftUI
 import AVFoundation
 
 struct CameraView: UIViewControllerRepresentable {
-    init(isCapturing: Binding<Bool>, image: Binding<Camera.Image?>, error: Binding<Error?>) {
+    init(isCapturing: Binding<Bool>, error: Binding<Error?>, handler: @escaping Camera.Handler) {
+        self.handler = handler
         _isCapturing = isCapturing
-        _image = image
         _error = error
     }
     
     @Binding private var isCapturing: Bool
-    @Binding private var image: Camera.Image?
     @Binding private var error: Error?
+    private let handler: Camera.Handler
     
     // MARK: UIViewControllerRepresentable
     class Coordinator: NSObject, CameraViewDelegate {
@@ -27,7 +27,7 @@ struct CameraView: UIViewControllerRepresentable {
         }
         
         func cameraCapturedImage(_ image: Camera.Image) {
-            parent.image = image
+            parent.handler(image)
         }
         
         func cameraFailed(error: Error) {

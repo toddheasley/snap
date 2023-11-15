@@ -4,7 +4,7 @@ import AVFoundation
 
 public struct Camera: View {
     public typealias Quality = AVCapturePhotoOutput.QualityPrioritization
-    public typealias Flash = AVCaptureDevice.FlashMode
+    public typealias FlashMode = AVCaptureDevice.FlashMode
     
     public struct Device {
         public typealias DeviceType = AVCaptureDevice.DeviceType
@@ -30,7 +30,7 @@ public struct Camera: View {
     
     public static var device: Device = .default()
     public static var quality: Quality = .balanced
-    public static var flash: Flash = .off
+    public static var flash: FlashMode = .off
     
     public struct Image: Equatable {
         public let fileType: UTType
@@ -42,19 +42,21 @@ public struct Camera: View {
         }
     }
     
-    public init(_ isCapturing: Binding<Bool>, image: Binding<Image?>, error: Binding<Error?> = .constant(nil)) {
+    public typealias Handler = (Image) -> Void
+    
+    public init(_ isCapturing: Binding<Bool>, error: Binding<Error?> = .constant(nil), handler: @escaping Handler) {
+        self.handler = handler
         _isCapturing = isCapturing
-        _image = image
         _error = error
     }
     
     @Binding private var isCapturing: Bool
-    @Binding private var image: Image?
     @Binding private var error: Error?
+    private let handler: Handler
     
     // MARK: View
     public var body: some View {
-        CameraView(isCapturing: $isCapturing, image: $image, error: $error)
+        CameraView(isCapturing: $isCapturing, error: $error, handler: handler)
             .ignoresSafeArea()
     }
 }

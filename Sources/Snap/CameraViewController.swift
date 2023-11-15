@@ -16,6 +16,14 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
             DispatchQueue.main.async {
                 self.delegate?.cameraToggledCapture(isCapturing: self.isCapturing)
             }
+            if isCapturing {
+                
+                // Flash view to indicate shutter action
+                view.alpha = 0.0
+                UIView.animate(withDuration: 0.35) {
+                    self.view.alpha = 1.0
+                }
+            }
         }
     }
     
