@@ -29,6 +29,6 @@ struct CloseHandle: View {
     }
 }
 
-#Preview("Close Handle") {
+#Preview {
     return CloseHandle(.constant(true))
 }

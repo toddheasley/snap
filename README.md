@@ -17,18 +17,29 @@ Written in [Swift](https://developer.apple.com/swift) 5.9 for [iOS](https://deve
 Present `Snap.Camera` using one of two included view modifiers for sheet and full-screen-cover modal presentations:
 
 ```swift
+import SwiftUI
 import Snap
 
-@State var isPresented: Bool = false
-@State var isCapturing: Bool = false
-
-Button(action: { isPresented.toggle() }) {
-    Label("Camera", systemImage: "camera")
-}
-.sheet($isPresented) {
-    Camera($isCapturing) { image in
-        // image.fileType: public.jpeg
-        // image.data: 2901515 bytes
+struct ContentView: View {
+    @State var isPresented: Bool = false
+    @State var isCapturing: Bool = false
+    @State var image: Camera.Image?
+    
+    var body: some View {
+        VStack {
+            Image(image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+            Button(action: { isPresented.toggle() }) {
+                Label("Camera", systemImage: "camera")
+            }
+            .sheet($isPresented) {
+                Camera($isCapturing) { image in
+                    self.image = image
+                    isPresented.toggle()
+                }
+            }
+        }
     }
 }
 ```
@@ -38,8 +49,6 @@ Toggle `$isCapturing` true to trigger the shutter programmatically. Captured sti
 `Snap.Camera` automatically selects the 1x-iest built-in rear camera available. Easily flip that to front-facing camera or pick your own:
 
 ```swift
-import Snap
-
 Camera.device = .default() // .default(.back)
 Camera.device = .default(.front)
 Camera.device = Camera.Device([
