@@ -37,6 +37,6 @@ struct ShutterToggle: View {
     }
 }
 
-#Preview("Shutter Toggle") {
+#Preview {
     return ShutterToggle(.constant(false))
 }
